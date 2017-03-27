@@ -10,7 +10,6 @@ const country = 'GB'
 // Register an Account and write the id reference into Firebase
 const createAccount = functions.https.onRequest((req, res, next) => {
   const userId = req.body.userId;
-  console.log("#######################", userId)
 
   let data = {
     email: req.body.email,
@@ -56,19 +55,18 @@ const createAccount = functions.https.onRequest((req, res, next) => {
     };
   }
 
-  console.log("¢¢¢¢¢¢¢", userId)
   admin.database().ref(`/users/${userId}`).once('value')
     .then(snapshot => snapshot.val())
     .then(user => {
-      console.log("∞∞∞∞∞∞∞∞∞∞∞∞", user)
       const stripeAccount = user.stripeAccount
 
       if (stripeAccount) {
+        // Update existing account
         stripe.accounts.update(stripeAccount, data)
           .then(result => res.send(result))
           .catch(err => res.send(500, err));
       } else {
-        // Create the Stripe Account
+        // Create a new account account
         data = Object.assign({}, data, {
           // Required
           managed: true,
@@ -77,7 +75,7 @@ const createAccount = functions.https.onRequest((req, res, next) => {
 
         stripe.accounts.create(data).then(account => {
           admin.database().ref(`/users/${userId}/stripeAccount`).set(account.id).then(() => {
-            res.sendaccount();
+            res.send(account);
           })
         }).catch(err => res.send(500, err));
       }
