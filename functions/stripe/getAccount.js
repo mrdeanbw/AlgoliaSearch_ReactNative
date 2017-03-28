@@ -7,6 +7,11 @@ const stripe = require('stripe')(functions.config().stripe.token);
 
 const getAccount = functions.https.onRequest((req, res, next) => {
   const userId = req.query.userId
+
+  if (!userId) {
+    res.send(400, "No UserId provided")
+  }
+
   admin.database().ref(`/users/${userId}`).once('value')
     .then(snapshot => snapshot.val())
     .then(user => {
