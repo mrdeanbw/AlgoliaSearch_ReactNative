@@ -4,12 +4,17 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 const stripe = require('stripe')(functions.config().stripe.token);
+
 const currency = functions.config().stripe.currency || 'GBP';
 const country = 'GB'
 
 // Register an Account and write the id reference into Firebase
 const createAccount = functions.https.onRequest((req, res, next) => {
   const userId = req.body.userId;
+
+  if (!userId) {
+    res.send(400, "No UserId provided")
+  }
 
   let data = {
     email: req.body.email,
