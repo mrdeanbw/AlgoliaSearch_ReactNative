@@ -13,7 +13,7 @@ firebase functions:log
 
 ## Deployment
 ```sh
-firebase functions:log
+firebase deploy --only functions
 ```
 
 ## References & Resources
