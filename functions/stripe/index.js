@@ -7,6 +7,13 @@ const currency = functions.config().stripe.currency || 'GBP';
 const country = 'GB'
 
 module.exports.cleanupUser = require('./cleanupUser');
+
+/* Stripe Account Functions */
 module.exports.createAccount = require('./createAccount');
 module.exports.createCustomer = require('./createCustomer');
 module.exports.getAccount = require('./getAccount');
+
+/* Stripe Card Functions */
+module.exports.createCard = require('./createCard');
+module.exports.deleteCard = require('./deleteCard');
+module.exports.getCards = require('./getCards');
