@@ -13,6 +13,7 @@ module.exports.stripeCreateAccount = stripe.createAccount;
 module.exports.stripeCreateCustomer = stripe.createCustomer;
 module.exports.stripeGetAccount = stripe.getAccount;
 
+module.exports.stripeChargeCard = stripe.chargeCard;
 module.exports.stripeCreateCard = stripe.createCard;
 module.exports.stripeDeleteCard = stripe.deleteCard;
 module.exports.stripeGetCards = stripe.getCards;

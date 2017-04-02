@@ -14,6 +14,7 @@ module.exports.createCustomer = require('./createCustomer');
 module.exports.getAccount = require('./getAccount');
 
 /* Stripe Card Functions */
+module.exports.chargeCard = require('./chargeCard');
 module.exports.createCard = require('./createCard');
 module.exports.deleteCard = require('./deleteCard');
 module.exports.getCards = require('./getCards');
