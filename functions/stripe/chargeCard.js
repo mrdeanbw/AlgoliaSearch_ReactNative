@@ -7,9 +7,10 @@ const stripe = require('stripe')(functions.config().stripe.token);
 
 const currency = functions.config().stripe.currency || 'GBP';
 const country = 'GB';
-const entryFee = 50;
+const fee = 50;
 
 const chargeCard = functions.https.onRequest((req, res, next) => {
+  const cardId = req.body.cardId;
   const eventId = req.body.eventId;
   const inviteId = req.body.inviteId;
   const userId = req.body.userId;
@@ -20,26 +21,55 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
     admin.database().ref(`/events/${eventId}`).once('value'),
     admin.database().ref(`/users/${userId}`).once('value')
   ]).then(values => {
-    event = values[0].val()
-    user = values[1].val()
+    event = values[0].val();
+    user = values[1].val();
 
     // Get the Organizer user object
-    return admin.database().ref(`/users/${event.organizer}`).once('value')
+    return admin.database().ref(`/users/${event.organizer}`).once('value');
   }).then(organizerResult => {
-    organizer = organizerResult.val()
+    organizer = organizerResult.val();
 
-    return stripe.charges.create({
-      amount: entry + fee,
+    const  chargeData = {
+      amount: (event.entryFee * 100) + fee,
       application_fee: fee,
       currency: currency,
+      customer: user.stripeCustomer,
       source: cardId,
-      customer: customerId,
-      description: "Made via hoops-stripe server",
+      description: 'Made via hoops-stripe server',
       destination: organizer.stripeAccount,
-    });
+    };
+
+    return stripe.charges.create(chargeData)
+  }).then(stripeResult => {
+    if (inviteId) {
+      /*
+       * If inviteId is defined, this payment is a response to an invitation from an
+       * event organiser.
+       * Once payment is processed, we must confirm the invite.
+       */
+      return admin.database().ref(`invites/${inviteId}/status`).set('confirmed')
+    } else {
+      const requestRef = admin.database().child('requests').push();
+      const requestKey = requestRef.key;
+
+      return admin.database().update({
+        [`events/${event.id}/requests/${requestKey}`]: true,
+        [`users/${uid}/requests/${requestKey}`]: true,
+        [`requests/${requestKey}`]: {
+          eventId: event.id,
+          userId: uid,
+          status: event.privacy === 'public' ? 'confirmed' : 'pending',
+          date: new Date(),
+          paymentMethod: 'app',
+        }
+      })
+    }
+  }).then(stripeResult => {
+    res.send(stripeResult);
+  }).catch(err => {
+    res.send(500, err);
   })
 
-  res.send('all good');
 })
 
 module.exports = chargeCard;
