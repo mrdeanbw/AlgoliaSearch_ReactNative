@@ -35,8 +35,8 @@ const createAccount = functions.https.onRequest((req, res, next) => {
         line2: req.body.addressLine2,
         postal_code: req.body.postcode,
       },
-      first_name: req.body.first_name,
-      last_name: req.body.last_name,
+      first_name: req.body.firstName,
+      last_name: req.body.lastName,
     },
     transfer_schedule: {
       interval: 'daily',
