@@ -20,4 +20,4 @@ module.exports.stripeDeleteCard = stripe.deleteCard;
 module.exports.stripeGetCards = stripe.getCards;
 
 /* Slack Hooks */
-module.exports.slackCreateUser = slack.createUser;
+// module.exports.slackCreateUser = slack.createUser;
