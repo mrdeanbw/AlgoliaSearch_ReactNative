@@ -69,7 +69,10 @@ const createAccount = functions.https.onRequest((req, res, next) => {
         // Update existing account
         stripe.accounts.update(stripeAccount, data)
           .then(result => res.send(result))
-          .catch(err => res.send(500, err));
+          .catch(err => {
+            console.log("updating acc", err);
+            res.send(500, err)
+          });
       } else {
         // Create a new account account
         data = Object.assign({}, data, {
@@ -82,7 +85,10 @@ const createAccount = functions.https.onRequest((req, res, next) => {
           admin.database().ref(`/users/${userId}/stripeAccount`).set(account.id).then(() => {
             res.send(account);
           })
-        }).catch(err => res.send(500, err));
+        }).catch(err => {
+          console.log("later error", err)
+          res.send(500, err);
+        })
       }
     })
 });

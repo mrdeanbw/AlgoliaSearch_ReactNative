@@ -49,19 +49,20 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
        */
       return admin.database().ref(`invites/${inviteId}/status`).set('confirmed')
     } else {
-      const requestRef = admin.database().child('requests').push();
+      const requestRef = admin.database().ref('requests').push();
       const requestKey = requestRef.key;
+      const requestData = {
+        eventId: event.id,
+        userId,
+        status: event.privacy === 'public' ? 'confirmed' : 'pending',
+        date: new Date(),
+        paymentMethod: 'app',
+      }
 
-      return admin.database().update({
+      return admin.database().ref('/').update({
         [`events/${event.id}/requests/${requestKey}`]: true,
-        [`users/${uid}/requests/${requestKey}`]: true,
-        [`requests/${requestKey}`]: {
-          eventId: event.id,
-          userId: uid,
-          status: event.privacy === 'public' ? 'confirmed' : 'pending',
-          date: new Date(),
-          paymentMethod: 'app',
-        }
+        [`users/${userId}/requests/${requestKey}`]: true,
+        [`requests/${requestKey}`]: requestData,
       })
     }
   }).then(stripeResult => {
