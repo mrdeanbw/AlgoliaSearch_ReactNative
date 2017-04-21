@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
+const slack = require('./slack');
 const stripe = require('./stripe');
 
 /* Stripe */
@@ -17,3 +18,6 @@ module.exports.stripeChargeCard = stripe.chargeCard;
 module.exports.stripeCreateCard = stripe.createCard;
 module.exports.stripeDeleteCard = stripe.deleteCard;
 module.exports.stripeGetCards = stripe.getCards;
+
+/* Slack Hooks */
+// module.exports.slackCreateUser = slack.createUser;
