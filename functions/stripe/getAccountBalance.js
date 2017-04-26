@@ -5,7 +5,7 @@ const functions = require('firebase-functions');
 const getUserPromise = require('./utils/getUserPromise');
 const stripe = require('stripe')(functions.config().stripe.token);
 
-const getAccount = functions.https.onRequest((req, res, next) => {
+const getAccountBalance = functions.https.onRequest((req, res, next) => {
   const userId = req.query.userId;
 
   getUserPromise(userId)
@@ -14,16 +14,18 @@ const getAccount = functions.https.onRequest((req, res, next) => {
         return Promise.reject({message: 'Stripe account not found'});
       }
 
-      return stripe.accounts.retrieve(user.stripeAccount);
+      return stripe.balance.retrieve({
+        stripe_account: user.stripeAccount
+      });
     })
     .then(stripeResponse => {
-      console.log('Stripe Response', stripeResponse)
+      console.log('Stripe Response', stripeResponse);
       res.send(stripeResponse);
     })
     .catch(err => {
       console.error(err);
-      res.send(400, err);
+      res.send(400, {message: err});
     })
-});
+})
 
-module.exports = getAccount
+module.exports = getAccountBalance;

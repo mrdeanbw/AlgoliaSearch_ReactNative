@@ -11,7 +11,9 @@ module.exports.cleanupUser = require('./cleanupUser');
 /* Stripe Account Functions */
 module.exports.createAccount = require('./createAccount');
 module.exports.createCustomer = require('./createCustomer');
+
 module.exports.getAccount = require('./getAccount');
+module.exports.getAccountBalance = require('./getAccountBalance');
 
 /* Stripe Card Functions */
 module.exports.chargeCard = require('./chargeCard');

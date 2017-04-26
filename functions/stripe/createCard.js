@@ -1,32 +1,22 @@
 'use strict';
 
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 
+const getUserPromise = require('./utils/getUserPromise');
 const stripe = require('stripe')(functions.config().stripe.token);
 
 const createCard = functions.https.onRequest((req, res, next) => {
   const userId = req.body.userId;
   const cardToken = req.body.cardToken;
 
-  if (!userId) {
-    res.send(400, 'No userId provided');
-  }
-
   if (!cardToken) {
-    res.send(400, 'No cardToken provided');
+    res.send(400, {message: 'No cardToken provided'});
   }
 
-  admin.database().ref(`/users/${userId}`).once('value')
-    .then(snapshot => snapshot.val())
+  getUserPromise(userId)
     .then(user => {
-      if (!user) {
-        res.send(404, 'User not found');
-      }
-
-      const stripeCustomer = user.stripeCustomer
-      if (!stripeCustomer) {
-        res.send(404, 'Stripe account not found')
+      if (!user.stripeCustomer) {
+        return Promise.reject({message: 'Stripe customer not found'});
       }
 
       return stripe.customers.createSource(stripeCustomer, {
@@ -34,7 +24,12 @@ const createCard = functions.https.onRequest((req, res, next) => {
       });
     })
     .then(response => {
-      res.send(response)
+      console.log('Stripe Response', stripeResponse);
+      res.send(stripeResponse);
+    })
+    .catch(err => {
+      console.error(err);
+      res.send(400, {message: err});
     })
 })
 
