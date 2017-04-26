@@ -1,37 +1,30 @@
 'use strict';
 
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
 
+const getUserPromise = require('./utils/getUserPromise');
 const stripe = require('stripe')(functions.config().stripe.token);
 
 const getAccountBalance = functions.https.onRequest((req, res, next) => {
   const userId = req.query.userId;
-  if (!userId) {
-    res.send(400, 'No UserId provided');
-  }
 
-  admin.database().ref(`/users/${userId}`).once('value')
-    .then(snapshot => snapshot.val())
+  getUserPromise(userId)
     .then(user => {
-      if (!user) {
-        res.send(404, 'User not found');
-      }
-
-      const stripeAccount = user.stripeAccount
-      if (!stripeAccount) {
-        res.send(404, 'Stripe account not found')
+      if (!user.stripeAccount) {
+        return Promise.reject({message: 'Stripe account not found'});
       }
 
       return stripe.balance.retrieve({
         stripe_account: user.stripeAccount
       });
     })
-    .then(response => {
-      res.send(response)
+    .then(stripeResponse => {
+      console.log('Stripe Response', stripeResponse);
+      res.send(stripeResponse);
     })
-    .catch(() => {
-      res.send(500, response)
+    .catch(err => {
+      console.error(err);
+      res.send(400, {message: err});
     })
 })
 
