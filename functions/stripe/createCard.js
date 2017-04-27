@@ -19,7 +19,7 @@ const createCard = functions.https.onRequest((req, res, next) => {
         return Promise.reject({message: 'Stripe customer not found'});
       }
 
-      return stripe.customers.createSource(stripeCustomer, {
+      return stripe.customers.createSource(user.stripeCustomer, {
         source: cardToken,
       });
     })
