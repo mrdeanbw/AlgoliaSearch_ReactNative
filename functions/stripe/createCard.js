@@ -28,8 +28,8 @@ const createCard = functions.https.onRequest((req, res, next) => {
       res.send(stripeResponse);
     })
     .catch(err => {
-      console.error(err);
-      res.send(400, {message: err});
+      console.err(err.message)
+      res.send(400, {message: err.message});
     })
 })
 
