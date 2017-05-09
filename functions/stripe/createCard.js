@@ -23,7 +23,7 @@ const createCard = functions.https.onRequest((req, res, next) => {
         source: cardToken,
       });
     })
-    .then(response => {
+    .then(stripeResponse => {
       console.log('Stripe Response', stripeResponse);
       res.send(stripeResponse);
     })
