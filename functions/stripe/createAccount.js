@@ -60,6 +60,7 @@ const createAccount = functions.https.onRequest((req, res, next) => {
     };
   }
 
+  console.info('Create account data', data)
   admin.database().ref(`/users/${userId}`).once('value')
     .then(snapshot => snapshot.val())
     .then(user => {
