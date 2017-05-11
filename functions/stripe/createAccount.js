@@ -70,8 +70,8 @@ const createAccount = functions.https.onRequest((req, res, next) => {
         stripe.accounts.update(stripeAccount, data)
           .then(result => res.send(result))
           .catch(err => {
-            console.log("updating acc", err);
-            res.send(500, err)
+            console.error(err);
+            res.send(500, err);
           });
       } else {
         // Create a new account account
@@ -81,12 +81,13 @@ const createAccount = functions.https.onRequest((req, res, next) => {
           country: country,
         })
 
+        console.log('createAccount Data', data);
         stripe.accounts.create(data).then(account => {
           admin.database().ref(`/users/${userId}/stripeAccount`).set(account.id).then(() => {
             res.send(account);
           })
         }).catch(err => {
-          console.log("later error", err)
+          console.error(err)
           res.send(500, err);
         })
       }
