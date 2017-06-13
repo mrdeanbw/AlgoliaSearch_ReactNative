@@ -5,7 +5,7 @@ const admin = require('firebase-admin');
 
 const types = require('./types');
 
-const pushNotification = functions.database.ref('notifications').onWrite(event => {
+const pushNotification = functions.database.ref('notifications/{notificationId}').onWrite(event => {
   // Only new objects
   if (event.data.previous.exists()) {
     return;
@@ -19,7 +19,7 @@ const pushNotification = functions.database.ref('notifications').onWrite(event =
   }
 
   const uid = notification.uid;
-  admin.databas().ref(`users/${uid}/FCMToken`).once('value', tokenSnapshot => {
+  admin.database().ref(`users/${uid}/FCMToken`).once('value', tokenSnapshot => {
     const token = tokenSnapshot.val();
 
     admin.database().ref(`userNotifications/${uid}`).once('value')
@@ -32,23 +32,26 @@ const pushNotification = functions.database.ref('notifications').onWrite(event =
         const type = notification.type;
 
         if (!token || !type) {
-          console.log("no token or type", token, type)
           return;
         }
 
-        const options = types[type];
+        const notificationType = types[type];
+
         const payload = {
-          to: token,
           notification: {
-            title: options.title,
-            body: options.body,
-            badge: count,
-          },
-          priority: 'high', // always show notification
+            title: notificationType.title,
+            body: notificationType.body,
+            badge: count.toString(),
+          }
         }
 
-        return admin.messaging().sendToDevice(token, payload).then(response => {
-          admin.database.ref(`notifications/${notificationId}/pushSent`).set(true);
+        const notificationOptions = {
+          priority: 'high',
+          timeToLive: 60 * 60 * 24,
+        }
+
+        return admin.messaging().sendToDevice(token, payload, notificationOptions).then(response => {
+          admin.database().ref(`notifications/${notificationId}/pushSent`).set(true);
         });
       });
   });
