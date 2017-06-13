@@ -2,7 +2,7 @@
 
 const functions = require('firebase-functions');
 
-const getUserPromise = require('./utils/getUserPromise');
+const getUserPromise = require('../utils/getUserPromise');
 const stripe = require('stripe')(functions.config().stripe.token);
 
 const getAccount = functions.https.onRequest((req, res, next) => {
