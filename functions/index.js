@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
+const notifications = require('./notifications');
 const slack = require('./slack');
 const stripe = require('./stripe');
 
@@ -22,3 +23,8 @@ module.exports.stripeGetCards = stripe.getCards;
 
 /* Slack Hooks */
 // module.exports.slackCreateUser = slack.createUser;
+
+/* Notifications */
+module.exports.notificationsChatMessage = notifications.chatMessage;
+module.exports.notificationsFriendsRequest = notifications.friendsRequest;
+module.exports.notificationsPushNotification = notifications.pushNotification;
