@@ -26,5 +26,6 @@ module.exports.stripeGetCards = stripe.getCards;
 
 /* Notifications */
 module.exports.notificationsChatMessage = notifications.chatMessage;
+module.exports.notificationsEventInvite = notifications.eventInvite;
 module.exports.notificationsFriendsRequest = notifications.friendsRequest;
 module.exports.notificationsPushNotification = notifications.pushNotification;
