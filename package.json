@@ -15,6 +15,6 @@
     "sinon": "2.3.5"
   },
   "scripts": {
-    "test": "mocha mocha tests --recursive --watch --debug-brk"
+    "test": "mocha mocha tests --recursive --watch"
   }
 }
