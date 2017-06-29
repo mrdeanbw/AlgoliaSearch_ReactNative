@@ -7,7 +7,7 @@ const stripe = require('stripe')(functions.config().stripe.token);
 
 const getAccountTransactions = functions.https.onRequest((req, res, next) => {
   const userId = req.query.userId;
-  let limitAmount = 0;
+  var limitAmount = 10;
 
   if(req.query.limit){
       limitAmount = req.query.limit;
@@ -20,7 +20,7 @@ const getAccountTransactions = functions.https.onRequest((req, res, next) => {
       }
         return stripe.balance.listTransactions({ 
             stripe_account: user.stripeAccount,
-            limit:  limitAmount
+            limit:  1
         });
     })
     .then(stripeResponse => {
