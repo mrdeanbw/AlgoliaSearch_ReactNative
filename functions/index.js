@@ -5,6 +5,7 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
+const cron = require('./cron');
 const notifications = require('./notifications');
 const slack = require('./slack');
 const stripe = require('./stripe');
@@ -28,3 +29,8 @@ module.exports.stripeGetCards = stripe.getCards;
 module.exports.notificationsChatMessage = notifications.chatMessage;
 module.exports.notificationsFriendsRequest = notifications.friendsRequest;
 module.exports.notificationsPushNotification = notifications.pushNotification;
+
+/* Cron */
+module.exports.cronEveryHour = cron.everyHour;
+module.exports.cronEveryDay = cron.everyDay;
+module.exports.cronEveryWeek = cron.everyWeek;
