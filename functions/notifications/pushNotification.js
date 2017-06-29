@@ -7,9 +7,13 @@ const types = require('./types');
 
 const pushNotification = functions.database.ref('notifications/{notificationId}').onWrite(event => {
   // Only new objects
+    console.log("# 2")
+
   if (event.data.previous.exists()) {
     return;
   }
+
+  console.log("# 2.1")
 
   const notification = event.data.val();
   const notificationId = event.data.key;

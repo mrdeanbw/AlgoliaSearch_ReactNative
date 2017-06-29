@@ -5,27 +5,27 @@ const admin = require('firebase-admin');
 
 const types = require('./types');
 
-const friendsRequest = functions.database.ref('friendRequests/{friendRequestsId}').onWrite(event => {
+const eventInvite = functions.database.ref('invites/{inviteId}').onWrite(event => {
 
   // Only new objects
   if (event.data.previous.exists()) {
     return;
   }
 
-  const request = event.data.val()
+  const invite = event.data.val();
   const notification = admin.database().ref('notifications').push();
-  const uid = request.toId;
 
   admin.database().ref('/').update({
     [`notifications/${notification.key}`]: {
       date: new Date(),
       read: false,
-      type: types.FRIEND_REQUEST.key,
-      friendRequestId: event.data.key,
-      uid: uid,
+      type: 'EVENT_INVITE',
+      inviteId: event.data.key,
+      uid: invite.userId,
     },
-    [`userNotifications/${uid}/${notification.key}`]: true,
+    [`userNotifications/${invite.userId}/${notification.key}`]: true,
   });
-});
 
-module.exports = friendsRequest;
+})
+
+module.exports = eventInvite;
