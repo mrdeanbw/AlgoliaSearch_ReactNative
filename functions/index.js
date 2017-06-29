@@ -16,6 +16,7 @@ module.exports.stripeCreateAccount = stripe.createAccount;
 module.exports.stripeCreateCustomer = stripe.createCustomer;
 module.exports.stripeGetAccount = stripe.getAccount;
 module.exports.stripeGetAccountBalance = stripe.getAccountBalance;
+module.exports.stripeGetAccountTransactions = stripe.getAccountTransactions;
 
 module.exports.stripeChargeCard = stripe.chargeCard;
 module.exports.stripeCreateCard = stripe.createCard;
