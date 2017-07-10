@@ -8,5 +8,12 @@
     "request-promise": "^4.2.0",
     "stripe": "^4.16.0"
   },
-  "private": true
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  },
+  "private": true,
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  }
 }
