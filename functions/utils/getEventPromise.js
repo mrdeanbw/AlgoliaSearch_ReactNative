@@ -2,7 +2,7 @@
 
 const admin = require('firebase-admin');
 
-function getEventPromise(userId) {
+const getEventPromise = (userId) => {
   return new Promise((resolve, reject) => {
     if (!eventId || typeof eventId !== 'string') {
       reject('Invalid or missing eventId');
