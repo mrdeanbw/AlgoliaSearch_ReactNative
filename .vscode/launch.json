@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug - Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+      "stopOnEntry": false,
+      "args": ["--no-timeouts", "--colors", "--recursive", "tests/**/*.spec.js"],
+      "env": {
+        "NODE_ENV": "testing"
+      },
+      "console": "internalConsole",
+      "sourceMaps": true
+    }
+  ]
+}
