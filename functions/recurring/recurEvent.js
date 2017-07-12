@@ -28,7 +28,8 @@ const recurEvent = () => {
 
       admin.database().ref('/').update({
         [`events/${newEventRef.key}`]: newEventData,
-        [`events/${event.id}/recurring`]: false
+        [`events/${event.id}/recurring`]: false,
+        [`users/${event.organizer}/organizing/${newEventRef.key}`]: true,
       }).then(() => {
         console.info(`Event ${event.id} cloned to ${newEventRef.key}`);
       });
