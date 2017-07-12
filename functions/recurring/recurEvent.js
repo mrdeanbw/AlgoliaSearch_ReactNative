@@ -12,18 +12,25 @@ const recurEvent = () => {
     Object.keys(events).map((key, index) => {
       let event =  events[key];
 
+      // Ignore all events that do not have recurring as true
+      if (!event.recurring) {
+        return;
+      }
+
       const newEvent = Object.assign({}, event);
       const newEventRef = admin.database().ref('events/').push();
 
       // Get the new projected date/time
-      const newEventData = newEvent.update({
+      const newEventData = Object.assign({}, newEvent, {
         id: newEventRef.key,
-        date: addToDate(event.recurringType, event.recurringValue),
+        date: addToDate(event.date, event.recurringType, event.recurringValue),
       });
 
-      newEventRef.set(newEventData).then(() => {
-        console.log("event cloned!!")
-        resolve();
+      admin.database().ref('/').update({
+        [`events/${newEventRef.key}`]: newEventData,
+        [`events/${event.id}/recurring`]: false
+      }).then(() => {
+        console.info(`Event ${event.id} cloned to ${newEventRef.key}`);
       });
     });
   });
