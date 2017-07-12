@@ -7,6 +7,7 @@ admin.initializeApp(functions.config().firebase);
 
 const cron = require('./cron');
 const notifications = require('./notifications');
+const recurring = require('./recurring');
 const slack = require('./slack');
 const stripe = require('./stripe');
 
@@ -36,3 +37,6 @@ module.exports.notificationsPushNotification = notifications.pushNotification;
 module.exports.cronEveryHour = cron.everyHour;
 module.exports.cronEveryDay = cron.everyDay;
 module.exports.cronEveryWeek = cron.everyWeek;
+
+/* Recurring */
+module.exports.recurEvent = recurring.recurEventHttp;
