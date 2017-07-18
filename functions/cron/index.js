@@ -2,11 +2,11 @@
 
 const functions = require('firebase-functions');
 
-const recurEvent = require('../recurring');
+// const recurEvent = require('../recurring');
 const addToDate = require('../utils/addToDate');
 
 const everyHour = functions.pubsub.topic('hourly-tick').onPublish((event) => {
-  recurEvent();
+  // recurEvent();
 });
 
 const everyDay = functions.pubsub.topic('daily-tick').onPublish((event) => {

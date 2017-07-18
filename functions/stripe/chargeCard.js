@@ -68,6 +68,7 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
   }).then(stripeResult => {
     res.send(stripeResult);
   }).catch(err => {
+    console.log(err);
     res.send(500, err);
   })
 
