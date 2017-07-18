@@ -29,6 +29,13 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
   }).then(organizerResult => {
     organizer = organizerResult.val();
 
+    if (!organizer.stripeAccount) {
+      let error = 'Organizer has no stripe account';
+
+      console.error({error, 'organizerId': organizer});
+      res.send(400, {message: 'Organizer has no stripe account'});
+    }
+
     const chargeData = {
       amount: (event.entryFee * 100) + fee,
       application_fee: fee,
@@ -39,7 +46,11 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
       destination: organizer.stripeAccount,
     };
 
-    console.info("Stripe Charge Request Body", chargeData)
+    console.info('Stripe Charge Request Body', chargeData, {
+      eventId,
+      userId,
+    });
+
     return stripe.charges.create(chargeData)
   }).then(stripeResult => {
     if (inviteId) {
