@@ -34,6 +34,8 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
 
       console.error({error, 'organizerId': organizer});
       res.send(400, {message: 'Organizer has no stripe account'});
+
+      return;
     }
 
     const chargeData = {
