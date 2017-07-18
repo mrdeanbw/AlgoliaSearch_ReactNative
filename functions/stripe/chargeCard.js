@@ -29,7 +29,7 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
   }).then(organizerResult => {
     organizer = organizerResult.val();
 
-    const  chargeData = {
+    const chargeData = {
       amount: (event.entryFee * 100) + fee,
       application_fee: fee,
       currency: currency,
@@ -39,6 +39,7 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
       destination: organizer.stripeAccount,
     };
 
+    console.info("Stripe Charge Request Body", chargeData)
     return stripe.charges.create(chargeData)
   }).then(stripeResult => {
     if (inviteId) {
