@@ -26,7 +26,7 @@ const eventRequest = functions.database.ref('requests/{requestId}').onWrite(even
           requestId: event.data.key,
           uid: eventData.organizer,
         },
-        [`userNotifications/${invite.userId}/${notification.key}`]: true,
+        [`userNotifications/${eventData.organizer}/${notification.key}`]: true,
       });
     })
 })
