@@ -30,12 +30,10 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
     organizer = organizerResult.val();
 
     if (!organizer.stripeAccount) {
-      let error = 'Organizer has no stripe account';
+      const message = 'Organizer has no stripe account';
 
-      console.error({error, 'organizerId': organizer});
-      res.send(400, {message: 'Organizer has no stripe account'});
-
-      return;
+      console.error({message, 'organizerId': organizer});
+      return Promise.reject({message});
     }
 
     const chargeData = {
@@ -83,9 +81,8 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
     res.send(stripeResult);
   }).catch(err => {
     console.log(err);
-    res.send(500, err);
+    res.send(400, err);
   })
-
 })
 
 module.exports = chargeCard;
