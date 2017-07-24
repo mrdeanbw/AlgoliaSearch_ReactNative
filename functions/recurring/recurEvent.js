@@ -31,7 +31,6 @@ const recurEvent = () => {
         [`events/${event.id}/recurring`]: false,
         [`users/${event.organizer}/organizing/${newEventRef.key}`]: true,
       }).then(() => {
-
           // Find all the REQUESTS for people that attended the previous event
           const requestPromises = event.requests.map((key) => {
             return firebase.database().ref('/requests/').child(key).once('value');
@@ -40,9 +39,7 @@ const recurEvent = () => {
           Promise.all(requestPromises).then((snapshots) => {
             snapshots.forEach((snapshot) => {
               const snapshot = snapshot.val();
-              createInvite(event.organizer, snanewEventRef.key)
-
-
+              createInvite(event.organizer, newEventRef.key);
             });
           });
 
