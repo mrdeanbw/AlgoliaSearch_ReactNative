@@ -29,7 +29,14 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
   }).then(organizerResult => {
     organizer = organizerResult.val();
 
-    const  chargeData = {
+    if (!organizer.stripeAccount) {
+      const message = 'Organizer has no stripe account';
+
+      console.error({message, 'organizerId': organizer});
+      return Promise.reject({message});
+    }
+
+    const chargeData = {
       amount: (event.entryFee * 100) + fee,
       application_fee: fee,
       currency: currency,
@@ -38,6 +45,11 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
       description: 'Made via hoops-stripe server',
       destination: organizer.stripeAccount,
     };
+
+    console.info('Stripe Charge Request Body', chargeData, {
+      eventId,
+      userId,
+    });
 
     return stripe.charges.create(chargeData)
   }).then(stripeResult => {
@@ -68,9 +80,9 @@ const chargeCard = functions.https.onRequest((req, res, next) => {
   }).then(stripeResult => {
     res.send(stripeResult);
   }).catch(err => {
-    res.send(500, err);
+    console.log(err);
+    res.send(400, err);
   })
-
 })
 
 module.exports = chargeCard;
