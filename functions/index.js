@@ -45,9 +45,17 @@ module.exports.cronEveryWeek = cron.everyWeek;
 module.exports.recurEvent = recurring.recurEventHttp;
 
 /* Algolia Search */
-//module.exports.initIndex = algoliaSearch.initIndex;
-module.exports.createIndex = algoliaSearch.createIndex;
-//module.exports.reindexIndex = algoliaSearch.reindexIndex;
-module.exports.removeIndex = algoliaSearch.removeIndex;
-module.exports.updateObject = algoliaSearch.updateObject;
-module.exports.searchQuery = algoliaSearch.searchQuery;
+// Events
+module.exports.initEventsIndex = algoliaSearch.initEventsIndex;
+module.exports.createEventIndex = algoliaSearch.createEventIndex;
+module.exports.reindexEventIndex = algoliaSearch.reindexEventIndex;
+module.exports.removeEventIndex = algoliaSearch.removeEventIndex;
+module.exports.updatEventeObject = algoliaSearch.updatEventeObject;
+module.exports.searchQueryEvent = algoliaSearch.searchQueryEvent;
+// Users
+module.exports.initUsersIndex = algoliaSearch.initUsersIndex;
+module.exports.createUserIndex = algoliaSearch.createUserIndex;
+module.exports.reindexUserIndex = algoliaSearch.reindexUserIndex;
+module.exports.removeUserIndex = algoliaSearch.removeUserIndex;
+module.exports.updateUserObject = algoliaSearch.updateUserObject;
+module.exports.searchQueryUser = algoliaSearch.searchQueryUser;
