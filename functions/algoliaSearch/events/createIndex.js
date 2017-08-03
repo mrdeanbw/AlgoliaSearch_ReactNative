@@ -11,15 +11,12 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('users');
 
-var createIndex = functions.database.ref('users/{userId}').onCreate(event => {
+var createEventIndex = functions.database.ref('users/{userId}').onCreate(event => {
     var index = client.initIndex('users');
     var firebaseObject = event.data.val();
-    // console.log("firebaseObject", firebaseObject);
-    // console.log('Uppercasing', event.params.userId, event.eventType,event.eventId );
-    // console.log('event.params.userId', event.params.userId);
-    // console.log("event.data", event.data);
-    // console.log("event.resource", event.resource);
-
+    console.log("firebaseObject", firebaseObject);
+    console.log('Uppercasing', event.params.userId, event.eventType,event.eventId );
+    console.log('event.params.userId', event.params.userId);
     firebaseObject.objectID = event.params.userId
 
     index.addObject(firebaseObject, function(err, content){
@@ -30,4 +27,4 @@ var createIndex = functions.database.ref('users/{userId}').onCreate(event => {
     })
 })
 
-module.exports = createIndex;
+module.exports = createEventIndex;

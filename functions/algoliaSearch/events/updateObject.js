@@ -10,7 +10,7 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('events');
 
-var updateObject = functions.database.ref('events/{eventId}').onUpdate(event => {
+var updatEventeObject = functions.database.ref('events/{eventId}').onUpdate(event => {
     // console.log('updateObject function');
     var index = client.initIndex('events');
     var firebaseObject = event.data.val();
@@ -28,4 +28,4 @@ var updateObject = functions.database.ref('events/{eventId}').onUpdate(event => 
     })
 })
 
-module.exports = updateObject;
+module.exports = updatEventeObject;

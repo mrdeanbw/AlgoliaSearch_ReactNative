@@ -11,7 +11,7 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('users');
 
-var createIndex = functions.database.ref('users/{userId}').onCreate(event => {
+var createUserIndex = functions.database.ref('users/{userId}').onCreate(event => {
     var index = client.initIndex('users');
     var firebaseObject = event.data.val();
     // console.log("firebaseObject", firebaseObject);
@@ -30,4 +30,4 @@ var createIndex = functions.database.ref('users/{userId}').onCreate(event => {
     })
 })
 
-module.exports = createIndex;
+module.exports = createUserIndex;
