@@ -1,19 +1,13 @@
+
 'use strict';
 
 module.exports = {};
-// Events
-module.exports.initEventsIndex = require('./events/initIndex');
-module.exports.createEventIndex = require('./events/createIndex');
-module.exports.reindexEventIndex = require('./events/reindexIndex');
-module.exports.removeEventIndex = require('./events/removeIndex');
-module.exports.updatEventeObject = require('./events/updateObject');
-module.exports.searchQueryEvent = require('./events/searchQuery');
-// Users
-module.exports.initUsersIndex = require('./users/initIndex');
-module.exports.createUserIndex = require('./users/createIndex');
-module.exports.reindexUserIndex = require('./users/reindexIndex');
-module.exports.removeUserIndex = require('./users/removeIndex');
-module.exports.updateUserObject = require('./users/updateObject');
-module.exports.searchQueryUser = require('./users/searchQuery');
+
+module.exports.initIndex = require('./initIndex');
+module.exports.createIndex = require('./createIndex');
+module.exports.reindexIndex = require('./reindexIndex');
+module.exports.removeIndex = require('./removeIndex');
+module.exports.updateObject = require('./updateObject');
+module.exports.searchQuery = require('./searchQuery');
 
 
