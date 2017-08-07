@@ -9,16 +9,9 @@ const algolia_api_key = functions.config().algolia.api_key;
 var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('users');
-
 var updateUserObject = functions.database.ref('users/{userId}').onUpdate(event => {
-    // console.log('updateObject function');
     var index = client.initIndex('users');
     var firebaseObject = event.data.val();
-    // console.log("firebaseObject", firebaseObject);
-    // console.log('Uppercasing', event.params.userId, event.eventType,event.eventId );
-    // console.log('event.params.userId', event.params.userId);
-    // console.log("event.data", event.data);
-    // console.log("event.resource", event.resource);
     firebaseObject.objectID = event.params.userId
     index.saveObject(firebaseObject, function(err, content){
         if (err){

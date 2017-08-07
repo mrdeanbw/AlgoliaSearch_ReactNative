@@ -2,7 +2,6 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-
 var algoliasearch = require('algoliasearch');
 
 const algolia_app_ID = functions.config().algolia.app_id;
@@ -14,21 +13,16 @@ const reindexEventIndex = functions.database.ref('events/{eventId}').onUpdate(ev
     if (event.data.previous.exists()) {
         return;
     }
-
     // Create a temp index
     var tempIndexName = 'events_temp';
     var tempIndex = client.initIndex(tempIndexName);
-
     var objectsToIndex = [];
     var values = event.data.val();
+
     for (var key in values){
         if (values.hasOwnProperty(key)){
-            //Get current firease object
             var firebaeObject = values[key];
-            //Specify algolia`s objectID using the firebase object key
-            console.log("firebaeObject", firebaeObject);
             firebaeObject.objectID = key;
-            //Add object for indexing
             objectsToIndex.push(firebaeObject);
         }
     }
@@ -41,7 +35,7 @@ const reindexEventIndex = functions.database.ref('events/{eventId}').onUpdate(ev
             if (err){
                 throw err;
             }
-            console.log('Firebase<>Algolia reimport done');
+            console.log('Event --> Algolia reimport done');
         });
     });
 });

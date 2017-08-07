@@ -10,7 +10,6 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('users');
 const removeUserIndex = functions.database.ref('users/{userId}').onDelete(event => {
-    // console.log("event.params.userId", event.params.userId);
     //Remove the object from Algolia
     index.deleteObject(event.params.userId, function(err, content){
         if (err){

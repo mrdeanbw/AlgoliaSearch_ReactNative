@@ -15,17 +15,14 @@ var createEventIndex = functions.database.ref('events/{eventId}').onCreate(event
         return;
     }
     var index = client.initIndex('events');
-    var firebaseObject = event.data.val();
-    console.log("firebaseObject", firebaseObject);
-    console.log('Uppercasing', event.params.eventId, event.eventType,event.eventId );
-    console.log('event.params.eventId', event.params.eventId);
+    var firebaseObject = event.data.val();    
     firebaseObject.objectID = event.params.eventId
 
     index.addObject(firebaseObject, function(err, content){
         if (err){
             throw err;
         }
-        console.log('Firebase<>Algolia object created!');
+        console.log('Event --> Algolia object created!');
     })
 })
 
