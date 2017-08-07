@@ -27,11 +27,25 @@ const searchEvents = functions.https.onRequest((req, res) => {
         console.log("search activity1", searchkeyObj.activity);
         var searchActivity = searchkeyObj.activity;
         index.search({
-            query : 'TENNIS'
-            //filters : ['activity']
+            filters : '(minAge > 20)'
         })
         .then(content => {
-            console.log("content.hits in searchEvent", content.hits);
+            console.log("1content.hits in searchEvent", content.hits);   
+        })
+
+        index.search({
+            filters : '(level : "open")'
+        })
+        .then(content => {
+            console.log("2content.hits in searchEvent", content.hits);
+            // res.status(200).send(content.hits);
+        })
+
+        index.search({
+            filters : 'level : open'
+        })
+        .then(content => {
+            console.log("3content.hits in searchEvent", content.hits);
             res.status(200).send(content.hits);
         })
     }
