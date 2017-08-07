@@ -52,6 +52,7 @@ module.exports.reindexEventIndex = algoliaSearch.reindexEventIndex;
 module.exports.removeEventIndex = algoliaSearch.removeEventIndex;
 module.exports.updatEventeObject = algoliaSearch.updatEventeObject;
 module.exports.searchQueryEvent = algoliaSearch.searchQueryEvent;
+module.exports.searchEvents = algoliaSearch.searchEvents;
 // Users
 module.exports.initUsersIndex = algoliaSearch.initUsersIndex;
 module.exports.createUserIndex = algoliaSearch.createUserIndex;

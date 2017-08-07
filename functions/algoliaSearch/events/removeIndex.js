@@ -12,7 +12,7 @@ var index = client.initIndex('events');
 const removeEventIndex = functions.database.ref('events/{eventId}').onDelete(event => {
     // console.log("event.params.userId", event.params.userId);
     //Remove the object from Algolia
-    index.deleteObject(event.params.userId, function(err, content){
+    index.deleteObject(event.params.eventId, function(err, content){
         if (err){
             throw err;
         }

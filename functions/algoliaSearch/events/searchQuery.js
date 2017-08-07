@@ -13,9 +13,9 @@ var index = client.initIndex('events');
 const searchQueryEvent = functions.https.onRequest((req, res) => {
     console.log("searchquery1", req.query.searchkey);
     index.search(req.query.searchkey, function(err, content){
-        console.log("content.hits", content.hits);
-        // res.status(200).send(content.hits);
-        res.status(200).send(req.query.searchkey);
+        console.log("content.hits in Events", content.hits);
+        res.status(200).send(content.hits);
+        // res.status(200).send(req.query.searchkey);
 
     })
 })

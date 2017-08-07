@@ -2,22 +2,24 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-
 var algoliasearch = require('algoliasearch');
 
 const algolia_app_ID = functions.config().algolia.app_id;
 const algolia_api_key = functions.config().algolia.api_key;
 var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
-var index = client.initIndex('users');
-
-var createEventIndex = functions.database.ref('users/{userId}').onCreate(event => {
-    var index = client.initIndex('users');
+var index = client.initIndex('events');
+var createEventIndex = functions.database.ref('events/{eventId}').onCreate(event => {
+    // Only new objects
+    if (event.data.previous.exists()) {
+        return;
+    }
+    var index = client.initIndex('events');
     var firebaseObject = event.data.val();
     console.log("firebaseObject", firebaseObject);
-    console.log('Uppercasing', event.params.userId, event.eventType,event.eventId );
-    console.log('event.params.userId', event.params.userId);
-    firebaseObject.objectID = event.params.userId
+    console.log('Uppercasing', event.params.eventId, event.eventType,event.eventId );
+    console.log('event.params.eventId', event.params.eventId);
+    firebaseObject.objectID = event.params.eventId
 
     index.addObject(firebaseObject, function(err, content){
         if (err){

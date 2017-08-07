@@ -14,8 +14,8 @@ const searchQueryUser = functions.https.onRequest((req, res) => {
     console.log("searchquery1", req.query.searchkey);
     index.search(req.query.searchkey, function(err, content){
         console.log("content.hits", content.hits);
-        // res.status(200).send(content.hits);
-        res.status(200).send(req.query.searchkey);
+        res.status(200).send(content.hits);
+        // res.status(200).send(req.query.searchkey);
 
     })
 })
