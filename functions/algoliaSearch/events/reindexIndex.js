@@ -9,7 +9,7 @@ const algolia_app_ID = functions.config().algolia.app_id;
 const algolia_api_key = functions.config().algolia.api_key;
 var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
-const reindexEventIndex = functions.database.ref('events/{eventId}').onUpdate(event => {
+const reindexIndex = functions.database.ref('events/{eventId}').onUpdate(event => {
     // Only new objects
     if (event.data.previous.exists()) {
         return;
@@ -46,4 +46,4 @@ const reindexEventIndex = functions.database.ref('events/{eventId}').onUpdate(ev
     });
 });
 
-module.exports = reindexEventIndex;
+module.exports = reindexIndex;

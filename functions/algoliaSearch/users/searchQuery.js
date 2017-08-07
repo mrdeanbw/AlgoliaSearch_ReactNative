@@ -10,7 +10,7 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('users');
 
-const searchQueryUser = functions.https.onRequest((req, res) => {
+const searchQuery = functions.https.onRequest((req, res) => {
     console.log("searchquery1", req.query.searchkey);
     index.search(req.query.searchkey, function(err, content){
         console.log("content.hits", content.hits);
@@ -20,4 +20,4 @@ const searchQueryUser = functions.https.onRequest((req, res) => {
     })
 })
 
-module.exports = searchQueryUser;
+module.exports = searchQuery;

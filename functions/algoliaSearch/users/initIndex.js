@@ -9,7 +9,7 @@ const algolia_api_key = functions.config().algolia.api_key;
 var client = algoliasearch(algolia_app_ID, algolia_api_key);
 var index = client.initIndex('events');
 
-const initUsersIndex = functions.database.ref('events/{eventId}').onCreate(event => {
+const initIndex = functions.database.ref('events/{eventId}').onCreate(event => {
     // Only new objects
     // if (event.data.previous.exists()) {
     //     return;
@@ -35,4 +35,4 @@ const initUsersIndex = functions.database.ref('events/{eventId}').onCreate(event
     // });
 });
 
-module.exports = initUsersIndex;
+module.exports = initIndex;
