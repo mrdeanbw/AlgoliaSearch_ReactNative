@@ -10,7 +10,7 @@ const notifications = require('./notifications');
 const recurring = require('./recurring');
 const slack = require('./slack');
 const stripe = require('./stripe');
-const algoliaSearch = require('./algoliaSearch');
+
 /* Stripe */
 module.exports.stripeCleanupUser = stripe.cleanupUser;
 module.exports.stripeCreateAccount = stripe.createAccount;
@@ -43,11 +43,3 @@ module.exports.cronEveryWeek = cron.everyWeek;
 
 /* Recurring */
 module.exports.recurEvent = recurring.recurEventHttp;
-
-/* Algolia Search */
-//module.exports.initIndex = algoliaSearch.initIndex;
-module.exports.createIndex = algoliaSearch.createIndex;
-//module.exports.reindexIndex = algoliaSearch.reindexIndex;
-module.exports.removeIndex = algoliaSearch.removeIndex;
-module.exports.updateObject = algoliaSearch.updateObject;
-module.exports.searchQuery = algoliaSearch.searchQuery;
