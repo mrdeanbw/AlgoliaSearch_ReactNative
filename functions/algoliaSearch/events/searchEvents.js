@@ -10,43 +10,67 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 
 var index = client.initIndex('events');
 // searchquery1 {
-    // "activity":"ATHLETICS
-    // "date":null,
-    // "gender":null,
-    // "level":"casual",
-    // "courtType":"indoor",
-    // "geospatial":{
-    //     "coords":null,
-    //     "radius":null}
-    // }
+// "activity":"ATHLETICS
+// "date":null,
+// "gender":null,
+// "level":"casual",
+// "courtType":"indoor",
+// "geospatial":{
+//     "coords":null,
+//     "radius":null}
+// }
 const searchEvents = functions.https.onRequest((req, res) => {
     var searchkeyObj = JSON.parse(req.query.searchkey);
-    console.log("searchquery2", searchkeyObj);
-
+    index.setSettings({
+        attributesForFaceting: [
+            'activity',
+            'date',
+            'gender',
+            'level',
+            'courtType',
+            'geospatial'
+        ]
+    });
+    
+    var queryString;
     if (searchkeyObj.activity){
-        console.log("search activity1", searchkeyObj.activity);
         var searchActivity = searchkeyObj.activity;
-        index.search({
-            filters : '(minAge > 20)'
-        })
-        .then(content => {
-            console.log("1content.hits in searchEvent", content.hits);   
-        })
+        var queryString = `activity:${searchActivity}`
+    }
+    
+   
+    if (searchkeyObj.gender){
+        var searchGender = searchkeyObj.gender;
+        queryString += ` AND gender:${searchGender}`
+    }
+    
+    if (searchkeyObj.level){
+        var searchLevel = searchkeyObj.level;
+        queryString += ` AND level:${searchLevel}`
+    }
 
-        index.search({
-            filters : '(level : "open")'
-        })
-        .then(content => {
-            console.log("2content.hits in searchEvent", content.hits);
-            // res.status(200).send(content.hits);
-        })
+    if (searchkeyObj.courtType){
+        var searchCourtType = searchkeyObj.courtType;
+        queryString += ` AND courtType:${searchCourtType}`
+    }
+    
+    if (searchkeyObj.date){
+        var searchDate = searchkeyObj.date;
+    }
 
+    index.search({
+        filters:`${queryString}`
+    }).then(content => {
+        res.status(200).send(content.hits);     
+    })
+
+    if (searchkeyObj.geospatial && searchkeyObj.geospatial.radius){
         index.search({
-            filters : 'level : open'
-        })
-        .then(content => {
-            console.log("3content.hits in searchEvent", content.hits);
-            res.status(200).send(content.hits);
+            aroundLatLng: 'searchkeyObj.geospatial.coords.lat, searchkeyObj.geospatial.coords.lng',
+            aroundRadius : searchkeyObj.geospatial.radius * 1609
+
+        }).then(content => {
+            //res.status(200).send(content.hits);     
         })
     }
 })

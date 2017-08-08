@@ -12,7 +12,6 @@ var index = client.initIndex('users');
 
 const searchQueryUser = functions.https.onRequest((req, res) => {
     index.search(req.query.searchkey, function(err, content){
-        console.log("content.hits", content.hits);
         res.status(200).send(content.hits);
     })
 })
