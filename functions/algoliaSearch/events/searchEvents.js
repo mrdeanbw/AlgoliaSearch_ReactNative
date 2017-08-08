@@ -7,18 +7,8 @@ var algoliasearch = require('algoliasearch');
 const algolia_app_ID = functions.config().algolia.app_id;
 const algolia_api_key = functions.config().algolia.api_key;
 var client = algoliasearch(algolia_app_ID, algolia_api_key);
-
 var index = client.initIndex('events');
-// searchquery1 {
-// "activity":"ATHLETICS
-// "date":null,
-// "gender":null,
-// "level":"casual",
-// "courtType":"indoor",
-// "geospatial":{
-//     "coords":null,
-//     "radius":null}
-// }
+
 const searchEvents = functions.https.onRequest((req, res) => {
     var searchkeyObj = JSON.parse(req.query.searchkey);
     index.setSettings({
@@ -32,32 +22,50 @@ const searchEvents = functions.https.onRequest((req, res) => {
         ]
     });
     
-    var queryString;
+    var queryString = '';
     if (searchkeyObj.activity){
         var searchActivity = searchkeyObj.activity;
         var queryString = `activity:${searchActivity}`
     }
     
-   
     if (searchkeyObj.gender){
         var searchGender = searchkeyObj.gender;
-        queryString += ` AND gender:${searchGender}`
+        if (queryString) {
+            queryString += ` AND gender:${searchGender}`
+        }
+        else queryString = `gender:${searchGender}`
     }
     
     if (searchkeyObj.level){
         var searchLevel = searchkeyObj.level;
-        queryString += ` AND level:${searchLevel}`
+        if (queryString) {
+            queryString += ` AND level:${searchLevel}`
+        }
+        else queryString = `level:${searchLevel}`
     }
 
     if (searchkeyObj.courtType){
         var searchCourtType = searchkeyObj.courtType;
-        queryString += ` AND courtType:${searchCourtType}`
+        if (searchCourtType == 'both'){
+            if (queryString) {
+                queryString += ` AND (courtType:indoor OR courtType:outdoor)`
+            }
+            else queryString = `(courtType:indoor OR courtType:outdoor)`
+        }            
+        
+        else {        
+            if (queryString) {
+                queryString += ` AND courtType:${searchCourtType}`
+            }
+            else queryString = `courtType:${searchCourtType}`
+        }
     }
     
     if (searchkeyObj.date){
         var searchDate = searchkeyObj.date;
     }
 
+    // console.log("queryString", queryString);
     index.search({
         filters:`${queryString}`
     }).then(content => {
