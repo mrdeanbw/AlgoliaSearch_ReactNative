@@ -3,6 +3,7 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 var algoliasearch = require('algoliasearch');
+const moment = require('moment');
 
 const algolia_app_ID = functions.config().algolia.app_id;
 const algolia_api_key = functions.config().algolia.api_key;
@@ -61,15 +62,37 @@ const searchEvents = functions.https.onRequest((req, res) => {
         }
     }
     
-    if (searchkeyObj.date){
-        var searchDate = searchkeyObj.date;
-    }
+    
 
-    // console.log("queryString", queryString);
+
+    console.log("queryString1", queryString);
+    if (queryString) queryString += ' AND privacy:public AND NOT cancelled:true'
+    else queryString = 'privacy:public AND NOT cancelled:true'
+    console.log("queryString2", queryString);
+    index.setSettings({
+        attributesForFaceting: [
+            'activity',
+            'address',
+            'title',
+            'cancelled',
+            'privacy'
+        ],
+    });
+
     index.search({
         filters:`${queryString}`
-    }).then(content => {
-        res.status(200).send(content.hits);     
+    })
+    .then(content => {
+            var result = [];
+            for (let i = 0;i < content.hits.length; i++){
+                if (searchkeyObj.date){
+                    if (moment(searchkeyObj.date).isBefore(content.hits[i].date)) result.push(content.hits[i]);   
+                }
+                else {
+                    if (moment(content.hits[i].date).isAfter()) result.push(content.hits[i]);
+                }
+            }
+            res.status(200).send(result); 
     })
 
     if (searchkeyObj.geospatial && searchkeyObj.geospatial.radius){
@@ -78,7 +101,7 @@ const searchEvents = functions.https.onRequest((req, res) => {
             aroundRadius : searchkeyObj.geospatial.radius * 1609
 
         }).then(content => {
-            //res.status(200).send(content.hits);     
+          
         })
     }
 })

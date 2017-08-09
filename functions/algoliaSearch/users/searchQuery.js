@@ -11,6 +11,17 @@ var client = algoliasearch(algolia_app_ID, algolia_api_key);
 var index = client.initIndex('users');
 
 const searchQueryUser = functions.https.onRequest((req, res) => {
+    index.setSettings({
+        attributesForFaceting: [
+            'name',
+            'interests'
+        ],
+        searchableAttributes: [
+            'name',
+            'interests'
+        ]
+    });
+    
     index.search(req.query.searchkey, function(err, content){
         res.status(200).send(content.hits);
     })
