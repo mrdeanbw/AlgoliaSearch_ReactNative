@@ -10,7 +10,11 @@ npm install -g firebase-tools
 ```sh
 firebase functions:log
 ```
-
+## Package install
+```sh
+cd functions
+npm install
+```
 ## Deployment
 ```sh
 firebase deploy --only functions
@@ -24,7 +28,16 @@ firebase functions:config:get
 ## Firebase Set Config Item
 ```sh
 firebase functions:config:set someservice.key="THE API KEY" someservice.id="THE CLIENT ID"
+
+firebase functions:config:set algolia.app_id="THE API KEY" 
+firebase functions:config:set algolia.api_key="THE CLIENT ID" 
 ```
+## Firebase functions
+initEventsIndex :  create indices when restore the all events from firebase
+createEventIndex : create index when new event is created
+reindexEventIndex : backup indices 
+removeEventIndex : remove index when event is deleted 
+updatEventeObject : update index when event is updated 
 
 ### Development
 ```json
