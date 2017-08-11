@@ -10,6 +10,7 @@ const notifications = require('./notifications');
 const recurring = require('./recurring');
 const slack = require('./slack');
 const stripe = require('./stripe');
+const algoliaSearch = require('./algoliaSearch');
 
 /* Stripe */
 module.exports.stripeCleanupUser = stripe.cleanupUser;

@@ -32,7 +32,6 @@ const geoSearch = functions.https.onRequest((req, res) => {
             for (let i = 0; i < content.hits.length; i++){
                 if (moment(content.hits[i].date).isAfter()) result.push(content.hits[i]);
             }
-            // console.log("result", result);
             res.status(200).send(result); 
         })
         .catch(err => console.log(err))
