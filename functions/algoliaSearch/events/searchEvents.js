@@ -12,16 +12,6 @@ var index = client.initIndex('events');
 
 const searchEvents = functions.https.onRequest((req, res) => {
     var searchkeyObj = JSON.parse(req.query.searchkey);
-    index.setSettings({
-        attributesForFaceting: [
-            'activity',
-            'date',
-            'gender',
-            'level',
-            'courtType',
-            'geospatial'
-        ]
-    });
     
     var queryString = '';
     if (searchkeyObj.activity){
@@ -62,27 +52,32 @@ const searchEvents = functions.https.onRequest((req, res) => {
         }
     }
     
-    
-
-
-    console.log("queryString1", queryString);
     if (queryString) queryString += ' AND privacy:public AND NOT cancelled:true'
     else queryString = 'privacy:public AND NOT cancelled:true'
-    console.log("queryString2", queryString);
     index.setSettings({
         attributesForFaceting: [
             'activity',
             'address',
+            'date',
+            'gender',
+            'level',
+            'courtType',
+            'geospatial',
             'title',
+            'addressCoords',
             'cancelled',
             'privacy'
         ],
     });
 
-    index.search({
-        filters:`${queryString}`
-    })
-    .then(content => {
+    if (searchkeyObj.geospatial && searchkeyObj.geospatial.radius){
+        var radius = parseInt(searchkeyObj.geospatial.radius) * 1609;
+        index.search({
+            filters:`${queryString}`,    
+            aroundLatLng: `${searchkeyObj.geospatial.coords.lat}, ${searchkeyObj.geospatial.coords.lng}`,
+            aroundRadius : radius
+        })
+        .then(content => {
             var result = [];
             for (let i = 0;i < content.hits.length; i++){
                 if (searchkeyObj.date){
@@ -93,16 +88,26 @@ const searchEvents = functions.https.onRequest((req, res) => {
                 }
             }
             res.status(200).send(result); 
-    })
-
-    if (searchkeyObj.geospatial && searchkeyObj.geospatial.radius){
-        index.search({
-            aroundLatLng: 'searchkeyObj.geospatial.coords.lat, searchkeyObj.geospatial.coords.lng',
-            aroundRadius : searchkeyObj.geospatial.radius * 1609
-
-        }).then(content => {
-          
         })
+        .catch(err => console.log(err))
+    }
+    else {
+        index.search({
+            filters:`${queryString}`
+        })
+        .then(content => {
+            var result = [];
+            for (let i = 0;i < content.hits.length; i++){
+                if (searchkeyObj.date){
+                    if (moment(searchkeyObj.date).isSame(content.hits[i].date)) result.push(content.hits[i]);   
+                }
+                else {
+                    if (moment(content.hits[i].date).isAfter()) result.push(content.hits[i]);
+                }
+            }
+            res.status(200).send(result);
+        })
+        .catch(err => console.log(err))
     }
 })
 

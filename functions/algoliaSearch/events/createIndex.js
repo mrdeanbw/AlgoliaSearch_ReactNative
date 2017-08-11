@@ -17,7 +17,13 @@ var createEventIndex = functions.database.ref('events/{eventId}').onCreate(event
     var index = client.initIndex('events');
     var firebaseObject = event.data.val();    
     firebaseObject.objectID = event.params.eventId
-
+    if (firebaseObject.addressCoords){
+        firebaseObject._geoloc = {
+            lat : firebaseObject.addressCoords.lat,
+            lng : firebaseObject.addressCoords.lon
+        }
+    }
+    
     index.addObject(firebaseObject, function(err, content){
         if (err){
             throw err;

@@ -23,6 +23,12 @@ const reindexEventIndex = functions.database.ref('events/{eventId}').onUpdate(ev
         if (values.hasOwnProperty(key)){
             var firebaeObject = values[key];
             firebaeObject.objectID = key;
+            if (firebaseObject.addressCoords){
+                firebaseObject._geoloc = {
+                    lat : firebaseObject.addressCoords.lat,
+                    lng : firebaseObject.addressCoords.lon
+                }
+            }
             objectsToIndex.push(firebaeObject);
         }
     }

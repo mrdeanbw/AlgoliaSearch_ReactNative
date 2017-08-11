@@ -22,6 +22,12 @@ const initEventsIndex = functions.database.ref('/events').onWrite(event => {
     //         var firebaeObject = values[key];
     //         //Specify algolia`s objectID using the firebase object key
     //         firebaeObject.objectID = key;
+    //         if (firebaseObject.addressCoords){
+    //             firebaseObject._geoloc = {
+    //                 lat : firebaseObject.addressCoords.lat,
+    //                 lng : firebaseObject.addressCoords.lon
+    //             }   
+    //         }
     //         //Add object for indexing
     //         objectsToIndex.push(firebaeObject);
     //     }

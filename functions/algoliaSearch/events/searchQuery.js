@@ -37,21 +37,12 @@ const searchQueryEvent = functions.https.onRequest((req, res) => {
     }).then(content => {
         var matches = JSON.parse(JSON.stringify(content.hits));
         var filtered = [];
-        console.log("matches", matches);
         for (var i =0; i < matches.length; i++){
             if (moment(matches[i].date).isBefore() == false){
-                console.log("isbefore", matches[i]);
                 filtered.push(matches[i]);
             }
         }        
-        console.log("filtered", filtered);
-
-        var filteredRes = matches.filter(event => {
-            if (moment(event.date).isBefore()){
-                return false;
-            } 
-        })
-        res.status(200).send(filteredRes);
+        res.status(200).send(filtered);
     })
 })
 
